@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    script(type='text/javascript', src='javascripts/checkers.js')
+    - var i = 0
+    ul.board
+        while i++ < 8
+            li.row
+                - var j = 0, x = 0
+                while j++ < 8
+                    div.cell(class=(i+j) % 2 === 0 ? 'even' : 'odd')
+                        if ((i+j) % 2 !== 0)
+                            div.spot(data-row=i-1, data-cell=x++)
+
+    

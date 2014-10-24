@@ -1,0 +1,18 @@
+{
+  "name": "checkers",
+  "version": "0.0.0",
+  "authors": [
+    "Nelson Teixeira <nelsonteixeira@baboom.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1"
+  }
+}
