@@ -1,14 +1,29 @@
+'use strict';
+
+// criar jogador humano
+// criar regras de validação
+// criar os primeiros bots
+// criar um segundo jogo
+
+function mock() {
+    GameClient.start();
+    var bot1 = new GameBot();
+    bot1.init();
+    window.setTimeout(function () {
+        bot1.joinGame('GAME!1');
+        bot1.play([20, 30]);    
+    }, 200);
+    
+}
+
 var GameClient = {
-
     ws: null,
-
     id: null,
-
     state: null,
 
     init: function () {
         this.ws = new WebSocket("ws://localhost:9002");
-        this.ws.onopen = this.send.bind(this, 'register', null);
+        this.ws.onopen = this.send.bind(this, 'create-game', null);
         this.ws.onmessage = this.receive.bind(this);
         this.ws.onclose = function()
         { 
@@ -17,22 +32,9 @@ var GameClient = {
         };
     },
 
-    send: function (action, data) {
-        var payload = {
-            action: action,
-            id: this.id,
-            data: data
-        };
-        console.log(payload);
-        this.ws.send(JSON.stringify(payload));
-    },
-
     receive: function (evt) {
         var payload = JSON.parse(evt.data);
         switch(payload.action) {
-            case 'registered':
-                this.id = payload.data.client_id;
-            break;
             case 'started':
                 this.gameId = payload.data.game_id;
                 this.printBoard(payload.data.board);
@@ -48,15 +50,8 @@ var GameClient = {
         this.send('start');
     },
 
-    play: function (player, move) {
-        this.send('play', {
-            player: player,
-            move: move
-        });
-    },
-
     newGame: function () {
-        this.ws.send('new-game');
+        this.send('new-game', {game_type: 'checkers'});
     },
 
     printBoard: function(boardState) {
@@ -77,6 +72,16 @@ var GameClient = {
                 }
             });
         });
+    },
+
+    send: function (action, data) {
+        var payload = {
+            action: action,
+            id: this.id,
+            data: data
+        };
+        console.log(payload);
+        this.ws.send(JSON.stringify(payload));
     }
 
 };

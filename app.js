@@ -9,9 +9,9 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
-var gameServer = require('./lib/gameserver');
+var GameSocketManager = require('./lib/GameSocketManager');
 
-gameServer.start();
+GameSocketManager.init();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
