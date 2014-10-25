@@ -58,13 +58,13 @@ div.even  {
 }
 
 .piece.black {
-    background-color:#e1e1e1;
+    background-color:#000;
     -webkit-box-shadow: 0px 0px 2px 2px #4D4D4D;
     box-shadow: 0px 0px 2px 2px #4D4D4D;
 }
 
 .piece.white {
-    background-color:#000;
+    background-color:#e1e1e1;
     -webkit-box-shadow: 0px 0px 2px 2px #4D4D4D;
     box-shadow: 0px 0px 2px 2px #4D4D4D;
 }

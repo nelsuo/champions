@@ -1,9 +1,21 @@
 'use strict';
 
-// criar jogador humano
+// criar jogador humano --- cool!!!
+// implementar a gestão dos turnos
 // criar regras de validação
-// criar os primeiros bots
+// criar o primeiro bot
 // criar um segundo jogo
+
+function mockHuman() {
+    GameClient.start();
+    var human1 = new HumanPlayer();
+    human1.init();
+    window.setTimeout(function () {
+        human1.joinGame(GameClient);
+        human1.bindUi();
+        
+    }, 200);
+}
 
 function mock() {
     GameClient.start();
@@ -20,6 +32,11 @@ var GameClient = {
     ws: null,
     id: null,
     state: null,
+    players: [],
+
+    getId: function () {
+        return this.id;
+    },
 
     init: function () {
         this.ws = new WebSocket("ws://localhost:9002");
@@ -32,15 +49,23 @@ var GameClient = {
         };
     },
 
+    addPlayer: function(player) {
+        this.players.push(player);
+    },
+
     receive: function (evt) {
         var payload = JSON.parse(evt.data);
+        console.log(payload);
         switch(payload.action) {
-            case 'started':
-                this.gameId = payload.data.game_id;
-                this.printBoard(payload.data.board);
+            case 'game-created':
+                this.id = payload.data.gameId;
             break;
             case 'state':
                 this.printBoard(payload.data.board);
+                console.log(this.players);
+                this.players.forEach(function(player) {
+                    player.bindUi();
+                });
             break;
         }
         console.log(payload);
