@@ -1,19 +1,20 @@
 'use strict';
 
 // criar jogador humano --- cool!!!
-// implementar a gestão dos turnos
+// implementar a gestão dos turnos --- cool!!!
 // criar regras de validação
 // criar o primeiro bot
 // criar um segundo jogo
 
 function mockHuman() {
     GameClient.start();
-    var human1 = new HumanPlayer();
+    var human1 = new HumanPlayer('Nelson');
+    var human2 = new HumanPlayer('Dina');
     human1.init();
+    human2.init();
     window.setTimeout(function () {
         human1.joinGame(GameClient);
-        human1.bindUi();
-        
+        human2.joinGame(GameClient);
     }, 200);
 }
 
@@ -33,6 +34,11 @@ var GameClient = {
     id: null,
     state: null,
     players: [],
+    playerActive: 0,
+    colors: [
+        'white',
+        'black'
+    ],
 
     getId: function () {
         return this.id;
@@ -50,7 +56,26 @@ var GameClient = {
     },
 
     addPlayer: function(player) {
+        var count = this.getPlayerCount();
         this.players.push(player);
+        player.setColor(this.colors[count]);
+        if (count + 1 === 2) {
+            this.turn();
+        }
+    },
+
+    getPlayerCount: function () {
+        console.log(this);
+        return this.players.length;
+    },
+
+    turn: function () {
+        if (this.playerActive > 1) {
+            this.playerActive = 0;
+        }
+        this.players[!this.playerActive * 1].sleep();
+        this.players[this.playerActive].wake();
+        this.playerActive ++;
     },
 
     receive: function (evt) {
@@ -62,10 +87,10 @@ var GameClient = {
             break;
             case 'state':
                 this.printBoard(payload.data.board);
-                console.log(this.players);
-                this.players.forEach(function(player) {
-                    player.bindUi();
-                });
+            break;
+            case 'turn-done':
+                this.printBoard(payload.data.board);
+                this.turn();
             break;
         }
         console.log(payload);

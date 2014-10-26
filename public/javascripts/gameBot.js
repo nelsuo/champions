@@ -26,6 +26,10 @@ function GameBot () {
         this.send('play', {move: move});
     };
 
+    this.turn = function () {
+        console.log('I don\'t now what to do, because I don\'t have a brain yet');
+    };
+
     this.receive = function (evt) {
         var payload = JSON.parse(evt.data);
         
@@ -39,11 +43,11 @@ function GameBot () {
             break;
         }
         console.log(payload);
-    },
+    };
 
     this.getId = function () {
         return this.id;
-    },
+    };
 
     this.send = function (action, data) {
         var payload = {

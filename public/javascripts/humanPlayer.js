@@ -1,12 +1,16 @@
 'use strict';
 
-function HumanPlayer () {
+function HumanPlayer (name) {
+
+    this.name = name;
 
     this.id = null;
 
     this.selected = null;
 
     this.game = null;
+
+    this.color = null;
 
     this.init = function () {
         this.ws = new WebSocket("ws://localhost:9002");
@@ -21,9 +25,23 @@ function HumanPlayer () {
         };
     };
 
+    this.wake = function () {
+        this.log('WAKEN');
+        this.bindUi();
+    };
+
+    this.sleep = function () {
+        this.log('SLEEPING');
+        this.unbindUi();
+    };
+
+    this.setColor = function (color) {
+        this.color = color;
+    };
+
     this.bindUi = function () {
         var that = this;
-        $('.piece').off('click').on('click', function (evt) {
+        $('.piece.' + this.color).off('click').on('click', function (evt) {
             that.selected = $(this);
             var fromSpot = $(this).parent('.spot');
             console.log('SELECTED: ', fromSpot.data('row'), fromSpot.data('cell'));
@@ -44,13 +62,20 @@ function HumanPlayer () {
         });
     };
 
+    this.unbindUi = function () {
+        $('.piece.' + this.color).off('click');
+        $('.spot').off('click');
+    };
+
     this.joinGame = function (game) {
+        this.log('JOINED GAME:' + game.getId());
         this.game = game;
         game.addPlayer(this);
         this.send('join-game', {gameId: game.getId()});
     };
 
     this.play = function (move) {
+        this.log('PLAYED: ' + move);
         this.send('play', {move: move});
     };
 
@@ -67,11 +92,11 @@ function HumanPlayer () {
             break;
         }
         console.log(payload);
-    },
+    };
 
     this.getId = function () {
         return this.id;
-    },
+    };
 
     this.send = function (action, data) {
         var payload = {
@@ -81,6 +106,10 @@ function HumanPlayer () {
         };
         console.log(payload);
         this.ws.send(JSON.stringify(payload));
+    };
+
+    this.log = function (message) {
+        console.log('[' + this.name + '] ', message);
     };
 
 }
