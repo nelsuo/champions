@@ -3,6 +3,7 @@
 function GameBot () {
 
     this.id = null;
+    this.color = null;
 
     this.init = function () {
         this.ws = new WebSocket("ws://localhost:9002");
@@ -30,6 +31,10 @@ function GameBot () {
         console.log('I don\'t now what to do, because I don\'t have a brain yet');
     };
 
+    this.setColor = function (color) {
+        this.color = color;
+    }
+
     this.receive = function (evt) {
         var payload = JSON.parse(evt.data);
         
@@ -40,6 +45,12 @@ function GameBot () {
         switch(payload.action) {
             case 'player_accepted':
                 this.id = payload.data.playerId;
+            break;
+            case 'wake':
+
+            break;
+            case 'sleep':
+
             break;
         }
         console.log(payload);

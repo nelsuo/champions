@@ -25,16 +25,6 @@ function HumanPlayer (name) {
         };
     };
 
-    this.wake = function () {
-        this.log('WAKEN');
-        this.bindUi();
-    };
-
-    this.sleep = function () {
-        this.log('SLEEPING');
-        this.unbindUi();
-    };
-
     this.setColor = function (color) {
         this.color = color;
     };
@@ -89,6 +79,14 @@ function HumanPlayer (name) {
         switch(payload.action) {
             case 'player_accepted':
                 this.id = payload.data.playerId;
+            break;
+            case 'wake':
+                this.log('WAKEN');
+                this.bindUi();
+            break;
+            case 'sleep':
+                this.log('SLEEPING');
+                this.unbindUi();
             break;
         }
         console.log(payload);
