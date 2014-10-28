@@ -12,6 +12,12 @@ function HumanPlayer (name) {
 
     this.color = null;
 
+    this.naturalDirection = true;
+
+    this.setNaturalDirection = function (naturalDirection) {
+        this.naturalDirection = naturalDirection;
+    };
+
     this.init = function () {
         this.ws = new WebSocket("ws://localhost:9002");
         this.ws.onopen = function () {
@@ -45,9 +51,10 @@ function HumanPlayer (name) {
             }
             var fromSpot = that.selected.parent('.spot');
             that.play([
-                fromSpot.data('row')*10 + fromSpot.data('cell'),
-                $(this).data('row')*10 + $(this).data('cell')
-            ]);
+                [fromSpot.data('row'), fromSpot.data('cell')],
+                [$(this).data('row'), $(this).data('cell')]
+            ]); 
+                
             that.selected = null;
         });
     };
@@ -66,6 +73,20 @@ function HumanPlayer (name) {
 
     this.play = function (move) {
         this.log('PLAYED: ' + move);
+        console.log(this.naturalDirection);
+        if (this.naturalDirection) {
+            move = [
+                move[0][0]*10 + move[0][1],
+                move[1][0]*10 + move[1][1]
+            ];
+        } else {
+            // invert move before send
+            move = [
+                Math.abs(7 - move[0][0])*10 + Math.abs(3 - move[0][1]),
+                Math.abs(7 - move[1][0])*10 + Math.abs(3 - move[1][1])
+            ];
+        }
+        console.log(move);
         this.send('play', {move: move});
     };
 

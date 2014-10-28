@@ -1,7 +1,8 @@
 // criar jogador humano --- cool!!!
 // implementar a gestão dos turnos --- cool!!!
 // turn logic must be on the server side --- cool!!!
-// when receiving data from play, we should always receive growing numbers. This is super important!!
+// when receiving data from play, we should always receive growing numbers. This is super important!! --- cool
+// row number must be considered to calculate the valid plays.
 // understand better how the perspectives should work
 // create validations for plays --- doing!
 // create my first bot

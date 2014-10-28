@@ -30,6 +30,9 @@ var GameClient = {
         var count = this.getPlayerCount();
         this.players.push(player);
         player.setColor(this.colors[count]);
+        if (count === 1) {
+            player.setNaturalDirection(false);    
+        }
     },
 
     getPlayerCount: function () {
