@@ -2,9 +2,10 @@
 // implementar a gestão dos turnos --- cool!!!
 // turn logic must be on the server side --- cool!!!
 // when receiving data from play, we should always receive growing numbers. This is super important!! --- cool
-// row number must be considered to calculate the valid plays.
+// row number must be considered to calculate the valid plays. --- cool
 // understand better how the perspectives should work
 // create validations for plays --- doing!
+//      ... being able to eat two pieces at a play. implement it on the javascript side
 // create my first bot
 // create a second game - probably naval wars...
 
