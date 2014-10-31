@@ -14,6 +14,10 @@ function HumanPlayer (name) {
 
     this.naturalDirection = true;
 
+    this.turnMoves = null;
+
+    this.playTimeout = null;
+
     this.setNaturalDirection = function (naturalDirection) {
         this.naturalDirection = naturalDirection;
     };
@@ -45,19 +49,34 @@ function HumanPlayer (name) {
         });
 
         $('.spot').off('click').on('click', function (evt) {
-            if (that.selected === null) {
-                console.error('You must select a piece first');
-                return;
-            }
-            var fromSpot = that.selected.parent('.spot');
-            that.play([
-                [fromSpot.data('row'), fromSpot.data('cell')],
-                [$(this).data('row'), $(this).data('cell')]
-            ]); 
-                
-            that.selected = null;
+            that.doMove.call(that, $(this));
         });
     };
+
+    this.wake = function () {
+        this.bindUi();
+        this.turnMoves = [];
+        this.playTimeout = null;
+        this.selected = null;
+    };
+
+    this.doMove = function (pieceEl) {
+        if (this.playTimeout !== null) {
+            window.clearTimeout(this.playTimeout);    
+        }
+        if (this.selected === null) {
+            console.error('You must select a piece first');
+            return;
+        }
+        var fromSpot = this.selected.parent('.spot');
+        if (this.turnMoves.length === 0) {
+            this.turnMoves.push([fromSpot.data('row'), fromSpot.data('cell')]);
+            this.turnMoves.push([pieceEl.data('row'), pieceEl.data('cell')]);
+        } else {
+            this.turnMoves.push([pieceEl.data('row'), pieceEl.data('cell')]);
+        }
+        this.playTimeout = window.setTimeout(this.play.bind(this), 1000);
+    }
 
     this.unbindUi = function () {
         $('.piece.' + this.color).off('click');
@@ -71,23 +90,19 @@ function HumanPlayer (name) {
         this.send('join-game', {gameId: game.getId()});
     };
 
-    this.play = function (move) {
-        this.log('PLAYED: ' + move);
-        console.log(this.naturalDirection);
-        if (this.naturalDirection) {
-            move = [
-                move[0][0]*10 + move[0][1],
-                move[1][0]*10 + move[1][1]
-            ];
-        } else {
-            // invert move before send
-            move = [
-                Math.abs(7 - move[0][0])*10 + Math.abs(3 - move[0][1]),
-                Math.abs(7 - move[1][0])*10 + Math.abs(3 - move[1][1])
-            ];
-        }
-        console.log(move);
-        this.send('play', {move: move});
+    this.play = function () {
+        console.log(this);
+        var moves = this.turnMoves.map(function (move) {
+            console.log(move);
+            if (this.naturalDirection) {
+                return move[0]*10 + move[1];
+            } else {
+                return Math.abs(7 - move[0])*10 + Math.abs(3 - move[1]);
+            }
+        }.bind(this)) 
+
+        this.log(moves);
+        this.send('play', {move: moves});
     };
 
     this.receive = function (evt) {
@@ -101,9 +116,12 @@ function HumanPlayer (name) {
             case 'player_accepted':
                 this.id = payload.data.playerId;
             break;
+            case 'play_rejected':
+                this.turnMoves = [];
+            break;
             case 'wake':
                 this.log('WAKEN');
-                this.bindUi();
+                this.wake();
             break;
             case 'sleep':
                 this.log('SLEEPING');
