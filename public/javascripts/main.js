@@ -3,14 +3,18 @@
 // turn logic must be on the server side --- cool!!!
 // when receiving data from play, we should always receive growing numbers. This is super important!! --- cool
 // row number must be considered to calculate the valid plays. --- cool
-// understand better how the perspectives should work
+
 //      ... maybe the board is always the same
-// create validations for plays --- doing!
-//      ... being able to eat two pieces at a play. implement it on the client and server side
-//      ... implement mandatory catches
-//      ... implement kings
+// create validations for plays --- doing queens missing!
+//      ... being able to eat two pieces at a play. implement it on the client and server side --- cool
+//      ... implement mandatory catches --- cool
+//      ... implement Queens
+
+// understand better how the perspectives should work
 // create my first bot
 // create a second game - probably naval battle...
+// improve gaming management
+// host the code, get a dynip
 
 
 function mockHuman() {
