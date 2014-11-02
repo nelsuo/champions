@@ -71,8 +71,14 @@ var GameClient = {
                         case 1:
                             p = 'white';
                         break;
+                        case 11:
+                            p = 'white queen';
+                        break;
                         case 2:
                             p = 'black';
+                        break;
+                        case 22:
+                            p = 'black queen';
                         break;
                     }
                     $('.board div[data-row=' + row + '][data-cell=' + cell + ']').append('<div class="piece ' + p + '">');

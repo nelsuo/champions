@@ -9,6 +9,8 @@
 //      ... being able to eat two pieces at a play. implement it on the client and server side --- cool
 //      ... implement mandatory catches --- cool
 //      ... implement Queens
+//      ... implement victory / draw.
+//      ... implement rules as array of functions
 
 // understand better how the perspectives should work
 // create my first bot

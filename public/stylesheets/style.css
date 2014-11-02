@@ -68,3 +68,8 @@ div.even  {
     -webkit-box-shadow: 0px 0px 2px 2px #4D4D4D;
     box-shadow: 0px 0px 2px 2px #4D4D4D;
 }
+
+.piece.queen {
+    -webkit-box-shadow: 0px 0px 2px 2px red;
+    box-shadow: 0px 0px 2px 2px red;
+}
