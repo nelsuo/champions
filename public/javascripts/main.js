@@ -7,16 +7,20 @@
 //      ... maybe the board is always the same
 // create validations for plays --- doing queens missing!
 //      ... being able to eat two pieces at a play. implement it on the client and server side --- cool
-//      ... implement mandatory catches --- cool
+//      ... implement mandatory jumps --- cool
+//      ... add inheritance to pieces, this will be very usefull for chess, and also js in general --- cool
 //      ... implement Queens
 //      ... implement victory / draw.
 //      ... implement rules as array of functions
+//      ... from the rules point of view, player should be always the same, invert it if needed before validating.
+
 
 // understand better how the perspectives should work
 // create my first bot
-// create a second game - probably naval battle...
+// create a second game - probably naval battle... mathmaticians tic tac toe ... chess
 // improve gaming management
 // host the code, get a dynip
+// improve graphics and ui ... drag and drop and textures for the win
 
 
 function mockHuman() {
