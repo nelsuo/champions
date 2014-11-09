@@ -1,6 +1,6 @@
-'use strict';
-
+/*global $:false, console:false, WebSocket:false, window:false */
 function HumanPlayer (name) {
+    'use strict';
 
     this.name = name;
 
@@ -76,7 +76,7 @@ function HumanPlayer (name) {
             this.turnMoves.push([pieceEl.data('row'), pieceEl.data('cell')]);
         }
         this.playTimeout = window.setTimeout(this.play.bind(this), 1000);
-    }
+    };
 
     this.unbindUi = function () {
         $('.piece.' + this.color).off('click');
@@ -99,7 +99,7 @@ function HumanPlayer (name) {
             } else {
                 return Math.abs(7 - move[0])*10 + Math.abs(3 - move[1]);
             }
-        }.bind(this)) 
+        }.bind(this));
 
         this.log(moves);
         this.send('play', {move: moves});

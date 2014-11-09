@@ -45,3 +45,7 @@ function mock() {
     }, 200);
     
 }
+
+window.setTimeout(function () {
+    mockHuman();
+}, 800);
