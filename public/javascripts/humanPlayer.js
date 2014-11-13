@@ -127,6 +127,14 @@ function HumanPlayer (name) {
                 this.log('SLEEPING');
                 this.unbindUi();
             break;
+            case 'victory':
+                this.log('VICTORY');
+                this.unbindUi();
+            break;
+            case 'defeat':
+                this.log('DEFEAT');
+                this.unbindUi();
+            break;
         }
         console.log(payload);
     };
