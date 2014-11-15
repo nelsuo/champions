@@ -1,21 +1,22 @@
 'use strict';
 
-var GameClient = {
-    ws: null,
-    id: null,
-    state: null,
-    players: [],
-    playerActive: 0,
-    colors: [
+function Game () {
+    
+    this.id = null;
+    this.state = null;
+    this.players = [];
+    this.playerActive = 0;
+    this.colors = [
         'white',
         'black'
-    ],
+    ];
 
-    getId: function () {
+    this.getId = function () {
         return this.id;
-    },
+    };
 
-    init: function () {
+    this.createGame = function () {
+        console.log('connectiong!!!');
         this.ws = new WebSocket("ws://localhost:9002");
         this.ws.onopen = this.send.bind(this, 'create-game', null);
         this.ws.onmessage = this.receive.bind(this);
@@ -24,44 +25,64 @@ var GameClient = {
             // websocket is closed.
             console.log('game interupted');
         };
-    },
+    };
 
-    addPlayer: function(player) {
+    this.addPlayer = function(player) {
         var count = this.getPlayerCount();
         this.players.push(player);
         player.setColor(this.colors[count]);
         if (count === 1) {
             player.setNaturalDirection(false);    
         }
-    },
+    };
 
-    getPlayerCount: function () {
+    this.getPlayerCount = function () {
         console.log(this);
         return this.players.length;
-    },
+    };
 
-    receive: function (evt) {
+    this.receive = function (evt) {
         var payload = JSON.parse(evt.data);
         console.log(payload);
         switch(payload.action) {
             case 'game-created':
                 this.id = payload.data.gameId;
             break;
-            case 'board-state':
-                this.printBoard(payload.data.board);
-            break;
-            case 'turn-done':
-                this.printBoard(payload.data.board);
-                this.turn();
-            break;
         }
-    },
+    };
 
-    start: function () {
+    this.send = function (action, data) {
+        var payload = {
+            action: action,
+            id: this.id,
+            data: data
+        };
+        console.log(payload);
+        this.ws.send(JSON.stringify(payload));
+    };
+}
+
+function GameUi(gameId) {
+
+    this.ws = null;
+    this.gameId = gameId;
+    
+    this.joinGame = function () {
+        this.ws = new WebSocket("ws://localhost:9002");
+        this.ws.onopen = this.send.bind(this, 'attach-game-ui', {gameId: this.gameId});
+        this.ws.onmessage = this.receive.bind(this);
+        this.ws.onclose = function()
+        { 
+            // websocket is closed.
+            console.log('game interupted');
+        };
+    };
+
+    this.start = function () {
         this.send('get-board-state');
     },
 
-    printBoard: function(boardState) {
+    this.printBoard = function(boardState) {
         $('.piece').remove();
         boardState.forEach(function (rowState, row) {
             rowState.forEach(function (cellState, cell) {
@@ -87,7 +108,17 @@ var GameClient = {
         });
     },
 
-    send: function (action, data) {
+    this.receive = function (evt) {
+        var payload = JSON.parse(evt.data);
+        console.log(payload);
+        switch(payload.action) {
+            case 'board-state':
+                this.printBoard(payload.data.board);
+            break;
+        }
+    };
+
+    this.send = function (action, data) {
         var payload = {
             action: action,
             id: this.id,
@@ -95,15 +126,12 @@ var GameClient = {
         };
         console.log(payload);
         this.ws.send(JSON.stringify(payload));
-    }
+    };
 
-};
-
-
+}
 
 $(document).ready(function () {
     if ("WebSocket" in window) {
         console.log('Connected to server successfully');
-        GameClient.init();
     }
 });

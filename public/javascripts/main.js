@@ -23,14 +23,66 @@
 // improve graphics and ui ... drag and drop and textures for the win
 
 
+function mock0() {
+    var game = new Game();
+    game.createGame();
+    window.setTimeout(function () {
+        var gameUi = new GameUi(game.getId());
+        gameUi.joinGame();
+        var human1 = new HumanPlayer('Nelson');
+        var human2 = new HumanPlayer('Dina');
+        human1.init();
+        human2.init();
+        window.setTimeout(function () {
+            console.log(game.getId());
+            human1.joinGame(game);
+            human2.joinGame(game);
+        }, 200); 
+    }, 200);
+}
+
+function mock001() {
+    var game = new Game();
+    game.createGame();
+}
+
+function mock002 () {
+    var gameUi = new GameUi('GAME!1');
+    gameUi.joinGame();
+
+    var human1 = new HumanPlayer('Nelson');
+    human1.init();
+
+    window.setTimeout(function () {
+        human1.joinGame('GAME!1');
+    }, 200); 
+}
+
+function mock003 () {
+    var gameUi = new GameUi('GAME!1');
+    gameUi.joinGame();
+
+    var human1 = new HumanPlayer('Dina');
+    human1.init();
+
+    window.setTimeout(function () {
+        human1.joinGame('GAME!1');
+    }, 200); 
+}
+
+function mock004 () {
+    var gameUi = new GameUi('GAME!1');
+    gameUi.joinGame();
+}
+
+
+
 function mockHuman() {
     GameClient.start();
-    var human1 = new HumanPlayer('Nelson');
     var human2 = new HumanPlayer('Dina');
     human1.init();
     human2.init();
     window.setTimeout(function () {
-        human1.joinGame(GameClient);
         human2.joinGame(GameClient);
     }, 200);
 }
@@ -41,11 +93,10 @@ function mock() {
     bot1.init();
     window.setTimeout(function () {
         bot1.joinGame('GAME!1');
-        bot1.play([20, 30]);    
+        bot1.play([20, 30]);
     }, 200);
-    
 }
 
 window.setTimeout(function () {
-    mockHuman();
+    //mock1();
 }, 800);

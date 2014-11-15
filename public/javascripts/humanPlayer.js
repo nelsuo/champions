@@ -83,15 +83,14 @@ function HumanPlayer (name) {
         $('.spot').off('click');
     };
 
-    this.joinGame = function (game) {
-        this.log('JOINED GAME:' + game.getId());
+    this.joinGame = function (gameId) {
+        this.log('JOINED GAME:' + gameId);
         this.game = game;
         game.addPlayer(this);
-        this.send('join-game', {gameId: game.getId()});
+        this.send('add-player', {gameId: gameId});
     };
 
     this.play = function () {
-        console.log(this);
         var moves = this.turnMoves.map(function (move) {
             console.log(move);
             if (this.naturalDirection) {

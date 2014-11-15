@@ -20,7 +20,7 @@ function GameBot () {
     
 
     this.joinGame = function (gameId) {
-        this.send('join-game', {gameId: gameId});
+        this.send('add-player', {gameId: gameId});
     };
 
     this.play = function (move) {
