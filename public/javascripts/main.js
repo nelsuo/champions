@@ -22,6 +22,10 @@
 // host the code, get a dynip
 // improve graphics and ui ... drag and drop and textures for the win
 
+// - create the game
+// - join a Game Ui to a game
+// - join a user to a GameUi . then join him to the game
+
 
 function mock0() {
     var game = new Game();
@@ -47,26 +51,31 @@ function mock001() {
 }
 
 function mock002 () {
-    var gameUi = new GameUi('GAME!1');
-    gameUi.joinGame();
-
+    var gameUi = new GameUi();
+    
     var human1 = new HumanPlayer('Nelson');
+    gameUi.addPlayer(human1);
     human1.init();
 
     window.setTimeout(function () {
-        human1.joinGame('GAME!1');
+        gameUi.joinGame('GAME!1');
+        window.setTimeout(function () {
+            human1.joinGame('GAME!1');
+        }, 200);     
     }, 200); 
 }
 
 function mock003 () {
-    var gameUi = new GameUi('GAME!1');
-    gameUi.joinGame();
-
+    var gameUi = new GameUi();
     var human1 = new HumanPlayer('Dina');
+    gameUi.addPlayer(human1);
     human1.init();
 
     window.setTimeout(function () {
-        human1.joinGame('GAME!1');
+        gameUi.joinGame('GAME!1');
+        window.setTimeout(function () {
+            human1.joinGame('GAME!1');
+        }, 200);     
     }, 200); 
 }
 
@@ -100,3 +109,9 @@ function mock() {
 window.setTimeout(function () {
     //mock1();
 }, 800);
+
+$(document).ready(function () {
+    if ("WebSocket" in window) {
+        console.log('Connected to server successfully');
+    }
+});

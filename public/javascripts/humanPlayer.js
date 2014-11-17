@@ -8,18 +8,20 @@ function HumanPlayer (name) {
 
     this.selected = null;
 
-    this.game = null;
-
     this.color = null;
 
-    this.naturalDirection = true;
+    this.invertedPlay = false;
 
     this.turnMoves = null;
 
     this.playTimeout = null;
 
-    this.setNaturalDirection = function (naturalDirection) {
-        this.naturalDirection = naturalDirection;
+    this.setInvertedPlay = function (invertedPlay) {
+        this.invertedPlay = invertedPlay;
+    };
+
+    this.getInvertedPlay = function () {
+        return this.invertedPlay;
     };
 
     this.init = function () {
@@ -85,15 +87,12 @@ function HumanPlayer (name) {
 
     this.joinGame = function (gameId) {
         this.log('JOINED GAME:' + gameId);
-        this.game = game;
-        game.addPlayer(this);
         this.send('add-player', {gameId: gameId});
     };
 
     this.play = function () {
         var moves = this.turnMoves.map(function (move) {
-            console.log(move);
-            if (this.naturalDirection) {
+            if (!this.invertedPlay) {
                 return move[0]*10 + move[1];
             } else {
                 return Math.abs(7 - move[0])*10 + Math.abs(3 - move[1]);

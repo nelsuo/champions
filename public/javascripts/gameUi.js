@@ -1,8 +1,7 @@
-'use strict';
+function GameUi() {
 
-function Game () {
-    
-    this.id = null;
+    this.ws = null;
+    this.gameId = null;
     this.state = null;
     this.players = [];
     this.playerActive = 0;
@@ -11,14 +10,23 @@ function Game () {
         'black'
     ];
 
-    this.getId = function () {
-        return this.id;
+    
+    this.getPlayerCount = function () {
+        return this.players.length;
     };
 
-    this.createGame = function () {
-        console.log('connectiong!!!');
+    this.joinGame = function (gameId) {
+        var inverted = false;
+        this.gameId = gameId;
+
+        if (this.getPlayerCount() === 1) {
+            if (this.players[0].name === 'Dina') {
+                inverted = true;
+            }
+        }
+
         this.ws = new WebSocket("ws://localhost:9002");
-        this.ws.onopen = this.send.bind(this, 'create-game', null);
+        this.ws.onopen = this.send.bind(this, 'attach-game-ui', {gameId: this.gameId, inverted: inverted});
         this.ws.onmessage = this.receive.bind(this);
         this.ws.onclose = function()
         { 
@@ -32,50 +40,8 @@ function Game () {
         this.players.push(player);
         player.setColor(this.colors[count]);
         if (count === 1) {
-            player.setNaturalDirection(false);    
+            player.setInvertedPlay(true);    
         }
-    };
-
-    this.getPlayerCount = function () {
-        console.log(this);
-        return this.players.length;
-    };
-
-    this.receive = function (evt) {
-        var payload = JSON.parse(evt.data);
-        console.log(payload);
-        switch(payload.action) {
-            case 'game-created':
-                this.id = payload.data.gameId;
-            break;
-        }
-    };
-
-    this.send = function (action, data) {
-        var payload = {
-            action: action,
-            id: this.id,
-            data: data
-        };
-        console.log(payload);
-        this.ws.send(JSON.stringify(payload));
-    };
-}
-
-function GameUi(gameId) {
-
-    this.ws = null;
-    this.gameId = gameId;
-    
-    this.joinGame = function () {
-        this.ws = new WebSocket("ws://localhost:9002");
-        this.ws.onopen = this.send.bind(this, 'attach-game-ui', {gameId: this.gameId});
-        this.ws.onmessage = this.receive.bind(this);
-        this.ws.onclose = function()
-        { 
-            // websocket is closed.
-            console.log('game interupted');
-        };
     };
 
     this.start = function () {
@@ -129,9 +95,3 @@ function GameUi(gameId) {
     };
 
 }
-
-$(document).ready(function () {
-    if ("WebSocket" in window) {
-        console.log('Connected to server successfully');
-    }
-});
